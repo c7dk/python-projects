@@ -1,5 +1,6 @@
 # 1. how to call module
 # simplest
+
 import random
 
 t1 = random.random()
@@ -11,11 +12,13 @@ print(t2)
 """
 # don't want to specify module name
 from random import randint
+
 t1 = randint(1, 39)
 print(t1)
 """
 """
 from random import *
+
 t1 = randint(1, 33)
 print(t1)
 """
