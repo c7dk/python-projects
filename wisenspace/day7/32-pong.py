@@ -2,6 +2,9 @@ import pygame
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+INIT_X = SCREEN_WIDTH / 2
+INIT_Y = SCREEN_HEIGHT / 2
+
 
 # color globals
 red = (255, 0, 0)
@@ -39,17 +42,48 @@ class Paddle:
 
 class Ball:
     def __init__(self, screen, name, x, y):
-        print('ball init')
         self.screen = screen
         self.x = x
         self.y = y
         self.pic = pygame.image.load('../dat/crazy_smile.bmp')
+        print(self.pic.get_rect().size)
+        self.r = 50
+        self.xv = -6
+        self.yv = 6
+
 
     
-    def update(self):
-        print('ball update')
-        self.screen.blit(self.pic, (self.x, self.y))
-    
+    def update(self, lpad, rpad):
+        self.x += self.xv
+        self.y += self.yv
+
+        if self.y - self.r <= 0 or self.y + self.r >= SCREEN_HEIGHT:
+            self.yv *= -1
+
+        # collision of ball and paddles
+        # left paddle
+        if self.x - self.r < lpad.x + lpad.w and self.y >= lpad.y and self.y <= lpad.y + lpad.h:
+            self.xv *= -1
+        # right paddle
+        if self.x + self.r > rpad.x and self.y >= rpad.y and self.y <= rpad.y + rpad.h:
+            self.xv *= -1
+
+        self.screen.blit(self.pic, (self.x - self.r , self.y - self.r))
+
+        self.update_score(lpad, rpad)
+
+    def update_score(self, lpad, rpad):
+        if self.x <= 0:
+            rpad.score += 1
+            self.x = INIT_X
+            self.y = INIT_Y
+            self.xv *= -1
+        elif self.x >= SCREEN_WIDTH:
+            lpad.score += 1
+            self.x = INIT_X
+            self.y = INIT_Y
+            self.xv *= -1
+
 
 class MyGame():
     def __init__(self, screen):
@@ -72,16 +106,16 @@ class MyGame():
             print('<<< esc pressed >>>')
             self.keep_going = False
 
-        score_text = self.font.render(str(self.leftpaddle.score) + "  " + str(self.rightpaddle.score), 1, violet)
+        score_text = self.font.render(str(self.leftpaddle.score) + "  " + str(self.rightpaddle.score), 1, white)
 
         net = pygame.draw.line(self.screen, yellow, (SCREEN_WIDTH/2, 5), (SCREEN_WIDTH/2, SCREEN_HEIGHT - 5))
         self.screen.blit(score_text, (SCREEN_WIDTH / 2 - score_text.get_width() / 2, 10))
 
-
         self.leftpaddle.update(pressed)
         self.rightpaddle.update(pressed)
 
-        self.ball.update()
+        self.ball.update(self.leftpaddle, self.rightpaddle)
+
 
     def event(self, evt):
         # print('<<< event >>>')
