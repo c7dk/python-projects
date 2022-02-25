@@ -8,7 +8,7 @@ colorkey = pic.get_at((0, 0))
 pic.set_colorkey(colorkey)
 picx = 0
 picy = 0
-GREEN = (0, 255, 0)
+TEAL = (0, 255, 255)
 timer = pygame.time.Clock()
 speedx = 10
 speedy = 10
@@ -26,7 +26,7 @@ while keep_going:
     if picy <= 0 or picy + pic.get_height() >= 600:
         speedy = -speedy
 
-    screen.fill(GREEN)
+    screen.fill(TEAL)
     screen.blit(pic, (picx, picy))
     pygame.display.update()
     timer.tick(60)
