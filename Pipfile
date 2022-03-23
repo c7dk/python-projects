@@ -5,6 +5,13 @@ name = "pypi"
 
 [packages]
 pygame = "*"
+jupyter = "*"
+jupyter-contrib-nbextensions = "*"
+jupyter-nbextensions-configurator = "*"
+pandas = "*"
+numpy = "*"
+requests = "*"
+matplotlib = "*"
 
 [dev-packages]
 
